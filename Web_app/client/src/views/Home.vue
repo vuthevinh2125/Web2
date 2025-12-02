@@ -63,15 +63,12 @@ export default {
 </script>
 
 <style scoped>
-/* 1. Xử lý Full màn hình */
 .full-screen-wrapper {
     position: fixed;
     
-    /* --- SỬA ĐOẠN NÀY --- */
     top: 60px; /* Đẩy xuống 45px (bằng chiều cao thanh menu) */
     height: calc(100vh - 60px); /* Chiều cao = Toàn màn hình trừ đi 45px */
     z-index: 0; /* Hạ thấp xuống để không đè lên menu hoặc các popup */
-    /* -------------------- */
 
     left: 0;
     width: 100vw;
@@ -83,7 +80,6 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     
-    /* 2. Căn chỉnh nội dung xuống dưới cùng */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -92,7 +88,6 @@ export default {
     padding-bottom: 40px;
 }
 
-/* Các đoạn khác giữ nguyên */
 .info-box {
     background-color: rgba(255, 255, 255, 0.95) !important;
     border-radius: 12px !important;
@@ -105,7 +100,6 @@ export default {
     .full-screen-wrapper {
         padding-bottom: 20px;
         position: relative;
-        /* Mobile thì trả về bình thường */
         top: 0; 
         height: auto;
         min-height: 100vh;

@@ -8,6 +8,25 @@
         </div>
     </h2>
 
+    <div class="ui stackable grid">
+        <div class="six wide column">
+            <div class="ui icon input fluid">
+                <input type="text" placeholder="Search by name..." v-model="searchQuery" @keyup.enter="handleSearch">
+                <i class="search icon link" @click="handleSearch"></i>
+            </div>
+        </div>
+        <div class="ten wide column right aligned">
+            <router-link to="/patients/new" class="ui button primary">
+                <i class="plus icon"></i> Add New
+            </router-link>
+            
+            <button class="ui red button" @click="onDeleteAll" v-if="patients.length > 0">
+                <i class="trash alternate icon"></i> Delete All
+            </button>
+        </div>
+    </div>
+    <br>
+
     <table class="ui celled selectable striped table">
       <thead>
         <tr>
@@ -20,7 +39,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(patient, index) in patients" :key="index">
+        <tr v-for="(patient, index) in paginatedPatients" :key="index">
           <td data-label="Name" class="four wide">{{ patient.name }}</td>
           <td data-label="Age" class="center aligned">{{ patient.age }}</td>
           
@@ -47,83 +66,162 @@
             </a>
           </td>
         </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-            <th colspan="8">
-                <router-link to="/patients/new" class="ui button primary right floated">
-                    <i class="plus icon"></i> Add New Patient
-                </router-link>
-            </th>
+
+        <tr v-if="patients.length === 0">
+            <td colspan="8" class="center aligned">
+                <div class="ui message info">No records found.</div>
+            </td>
         </tr>
-      </tfoot>
+      </tbody>
     </table>
+
+    <div class="ui grid centered" v-if="totalPages > 1" style="margin-top: 10px;">
+        <div class="ui pagination menu">
+            <a class="item" :class="{disabled: currentPage === 1}" @click="prevPage">
+                <i class="chevron left icon"></i>
+            </a>
+            
+            <div class="item disabled">
+                Page {{ currentPage }} of {{ totalPages }}
+            </div>
+
+            <a class="item" :class="{disabled: currentPage === totalPages}" @click="nextPage">
+                <i class="chevron right icon"></i>
+            </a>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
-import {ref, onMounted } from "vue";
-import Swal from 'sweetalert2'; // Import SweetAlert2
-import {viewAllPatients, deletePatientByID } from "../helpers/api";
+// Import thêm 'computed' để tính toán phân trang
+import { ref, onMounted, computed } from "vue";
+import Swal from 'sweetalert2'; 
+import { viewAllPatients, deletePatientByID, searchPatientByName, deleteAllPatients } from "../helpers/api";
 
 export default {
   name: "Patients", 
   setup() {
+    //  Khai báo biến 
     const patients = ref([]);
+    const searchQuery = ref("");
+    
+    // Cấu hình Phân trang
+    const currentPage = ref(1);
+    const itemsPerPage = 9; 
 
+    // 1. Cắt danh sách bệnh nhân dựa trên trang hiện tại
+    const paginatedPatients = computed(() => {
+        const start = (currentPage.value - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return patients.value.slice(start, end);
+    });
+
+    // 2. Tính tổng số trang
+    const totalPages = computed(() => {
+        return Math.ceil(patients.value.length / itemsPerPage);
+    });
+
+    // 3. Hàm chuyển trang
+    const prevPage = () => {
+        if (currentPage.value > 1) currentPage.value--;
+    };
+    const nextPage = () => {
+        if (currentPage.value < totalPages.value) currentPage.value++;
+    };
+
+    //API Calls
     const fetchPatients = async () => {
         patients.value = (await viewAllPatients()) || [];
+    };
+
+    const handleSearch = async () => {
+        if (searchQuery.value.trim() === "") {
+            await fetchPatients();
+        } else {
+            const result = await searchPatientByName(searchQuery.value);
+            patients.value = result || [];
+            currentPage.value = 1; // Reset về trang 1 khi tìm kiếm
+        }
+    };
+
+    const onDeleteAll = async () => {
+        const result = await Swal.fire({
+            title: "DELETE ALL RECORDS?",
+            text: "This action cannot be undone! Are you sure?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, Delete Everything!"
+        });
+
+        if (result.isConfirmed) {
+            await deleteAllPatients();
+            await Swal.fire("Deleted!", "All records have been wiped.", "success");
+            fetchPatients();
+        }
+    };
+
+    const onDelete = async (id) => {
+        const result = await Swal.fire({
+            title: "Delete this record?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Delete"
+        });
+
+        if (result.isConfirmed){
+            await deletePatientByID(id);
+            await Swal.fire("Deleted!", "Removed.", "success");
+            await fetchPatients();
+            
+            // Nếu xóa hết item ở trang cuối cùng thì tự động lùi lại 1 trang
+            if (paginatedPatients.value.length === 0 && currentPage.value > 1) {
+                currentPage.value--;
+            }
+        }
     };
 
     onMounted(async () =>{
         fetchPatients();
     });
-    
-    const onDelete = async (id) => {
-        // Use SweetAlert2 for deletion confirmation
-        const result = await Swal.fire({
-            title: "Confirm Record Deletion?",
-            text: "Data will be permanently deleted from the system!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Delete",
-            cancelButtonText: "Cancel"
-        });
 
-        if (result.isConfirmed){
-            await deletePatientByID(id);
-            // Success notification
-            await Swal.fire("Deleted!", "The record has been removed.", "success");
-            fetchPatients();
-        }
-    };
-
+    // Return tất cả ra Template
     return {
         patients,
+        searchQuery,
+        handleSearch,
+        onDeleteAll,
         onDelete,
+        // Variables cho phân trang
+        paginatedPatients,
+        currentPage,
+        totalPages,
+        prevPage,
+        nextPage
     };
   },
 };
 </script>
 
 <style scoped>
-/* Scoped CSS for specific component styling */
 .positive {
-    background-color: #e0fff9 !important; /* Light teal for Male */
+    background-color: #e0fff9 !important; 
     font-weight: 500;
 }
 .negative {
-    background-color: #fff0f0 !important; /* Light pink for Female */
+    background-color: #fff0f0 !important; 
     font-weight: 500;
 }
-/* Translucent background box for the table on the busy body background */
 .patient-list-wrapper {
     padding-top: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Makes the box translucent white */
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-height: 500px; 
 }
 </style>

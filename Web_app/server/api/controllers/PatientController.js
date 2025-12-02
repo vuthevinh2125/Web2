@@ -48,9 +48,26 @@ const viewPatientByID = async (req,res) =>{
     }
 }
 
+const searchPatientByName = async (req, res) => {
+    try {
+        const name = req.params.name;
+        // RegExp 'i' để không phân biệt hoa thường
+        const patients = await PatientsModel.find({ name: new RegExp(name, "i") });
+        res.status(200).json(patients);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error searching patient");
+    }
+}
 
-
-
+const deleteAllPatients = async (req, res) => {
+    try {
+        await PatientsModel.deleteMany();
+        res.json({ message: 'All patients deleted' });
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 module.exports = {
     viewAllPatients,
@@ -58,5 +75,7 @@ module.exports = {
     deletePatientByID,
     updatePatient,
     viewPatientByID,
+    searchPatientByName,
+    deleteAllPatients,
     
 }
