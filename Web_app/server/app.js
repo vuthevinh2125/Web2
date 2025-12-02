@@ -19,6 +19,12 @@ app.post('/login', authController.login);
 // Route quản lý bệnh nhân
 patientRouter(app);
 
+//test page
+app.get('/test', (req, res) => {
+    // Trả về JSON đơn giản
+    res.json({ message: "Backend is running successfully! Connection established." });
+});
+
 // Chạy Server
 const PORT = 3000
 app.listen(PORT, () => {

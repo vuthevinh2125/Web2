@@ -35,8 +35,6 @@ app.component('product-display', {
             v-on:click="addToCart">
             Add to Cart
             </button>
-
-                <div class="vinh">VINH</div>
             </div>
         </div>
         <review-list v-if="reviews.length" :reviews="reviews"></review-list>

@@ -77,7 +77,7 @@ export const searchPatientByName = async (name) => {
         const response = await axios.get(backendUrl + 'search/' + name);
         return response.data;
     } catch (err) {
-        console.error("Lỗi tìm kiếm:", err);
+        console.error("Search Patient By Name Error:", err);
         return []; // Trả về mảng rỗng nếu lỗi
     }
 };
@@ -89,7 +89,19 @@ export const deleteAllPatients = async () => {
         const response = await axios.delete(backendUrl);
         return response.data;
     } catch (err) {
-        console.error("Lỗi xóa tất cả:", err);
+        console.error("Delete All Patients Error:", err);
         return null;
+    }
+
+
+};
+export const callTestAPI = async () => {
+    try {
+        // Gọi vào đường dẫn test của Backend
+        const response = await axios.get('http://localhost:3000/test');
+        return response.data;
+    } catch (err) {
+        console.error("Test API Error:", err);
+        return { message: "Connection Failed!" };
     }
 };

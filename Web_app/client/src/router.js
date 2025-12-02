@@ -6,8 +6,14 @@ import New from './views/New.vue'
 import Edit from './views/Edit.vue'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
+import Test from './views/Test.vue'
 
 const routes = [
+    {
+        path: '/test',
+        name: 'Test',
+        component: Test
+    },
     {
         path: '/',
         redirect: '/home' 
@@ -82,10 +88,10 @@ export default router
 //     method: 'POST',
 //     headers: { 'Content-Type': 'application/json' },
 //     body: JSON.stringify({
-//         username: "user_test", // Đổi thành tên mới
+//         username: "admin", // Đổi thành tên mới
 //         password: "123",
 //         fullName: "Test Account",
-//         role: "admin" // Hoặc 'patient'
+//         role: "admin" 
 //     })
 // })
 // .then(res => res.json())

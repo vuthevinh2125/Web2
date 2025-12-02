@@ -1,0 +1,102 @@
+[
+  {
+    "name": "do coursework",
+    "date": "2025/10/24",
+    "status": "doing"
+  },
+  {
+    "name": "complete assignment",
+    "date": "2025/10/25",
+    "status": "planned"
+  },
+  {
+    "name": "prepare presentation",
+    "date": "2025/10/26",
+    "status": "doing"
+  },
+  {
+    "name": "review lecture notes",
+    "date": "2025/10/27",
+    "status": "doing"
+  },
+  {
+    "name": "submit project report",
+    "date": "2025/10/28",
+    "status": "pending"
+  },
+  {
+    "name": "group meeting",
+    "date": "2025/10/29",
+    "status": "planned"
+  },
+  {
+    "name": "practice coding",
+    "date": "2025/10/30",
+    "status": "doing"
+  },
+  {
+    "name": "read research paper",
+    "date": "2025/10/31",
+    "status": "pending"
+  },
+  {
+    "name": "finish homework",
+    "date": "2025/11/01",
+    "status": "planned"
+  },
+  {
+    "name": "prepare for quiz",
+    "date": "2025/11/02",
+    "status": "doing"
+  },
+  {
+    "name": "update documentation",
+    "date": "2025/11/03",
+    "status": "pending"
+  },
+  {
+    "name": "test application",
+    "date": "2025/11/04",
+    "status": "doing"
+  },
+  {
+    "name": "fix bugs",
+    "date": "2025/11/05",
+    "status": "planned"
+  },
+  {
+    "name": "write summary",
+    "date": "2025/11/06",
+    "status": "pending"
+  },
+  {
+    "name": "meet supervisor",
+    "date": "2025/11/07",
+    "status": "planned"
+  },
+  {
+    "name": "organize study plan",
+    "date": "2025/11/08",
+    "status": "doing"
+  },
+  {
+    "name": "prepare lab report",
+    "date": "2025/11/09",
+    "status": "pending"
+  },
+  {
+    "name": "complete module tasks",
+    "date": "2025/11/10",
+    "status": "doing"
+  },
+  {
+    "name": "revise coursework",
+    "date": "2025/11/11",
+    "status": "planned"
+  },
+  {
+    "name": "upload final project",
+    "date": "2025/11/12",
+    "status": "pending"
+  }
+]

@@ -48,7 +48,7 @@ export default {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('username', res.data.username);
         
-        // Chuyển thẳng vào trang quản lý
+        // Chuyển thẳng vào trang home
         this.$router.push('/home');
       } catch (err) {
         this.errorMsg = "Incorrect username or password!";

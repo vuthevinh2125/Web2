@@ -15,6 +15,10 @@
           <router-link to="/patients/new" class="item">
             <i class="plus icon"></i> Add New Patient
           </router-link>
+
+          <router-link to="/test" class="item">
+            <i class="cogs icon"></i> Test Connection
+          </router-link>
           
           
           

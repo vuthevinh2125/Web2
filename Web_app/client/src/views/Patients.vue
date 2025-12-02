@@ -108,7 +108,7 @@ export default {
     
     // Cấu hình Phân trang
     const currentPage = ref(1);
-    const itemsPerPage = 9; 
+    const itemsPerPage = 5; 
 
     // 1. Cắt danh sách bệnh nhân dựa trên trang hiện tại
     const paginatedPatients = computed(() => {
